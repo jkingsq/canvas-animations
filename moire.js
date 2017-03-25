@@ -65,7 +65,7 @@ function initStar() {
 
 function drawStar() {
     var t = time / 1000;
-    var theta = t * Math.PI / star.rps;
+    var theta = 2 * t * Math.PI * star.rps;
     ctx.strokeStyle = star.color;
     for(i = 0; i < star.rays; i++) {
         var rayTheta = theta + i * Math.PI / star.rays;
