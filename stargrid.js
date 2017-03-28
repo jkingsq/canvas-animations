@@ -91,7 +91,9 @@ function initGrid() {
     grid.visible = false;
     //time in seconds it takes for a cell in the grid to fade in or out
     grid.fadeTime = 500;
-    grid.fadeStart = time;
+    grid.fadeStart = 0;
+    //used to check whether the fade animation is finished when a key is pressed
+    grid.fading = false;
 
     //size of each cell in the grid
     grid.boxWidth = 50;
@@ -127,12 +129,15 @@ function initGrid() {
 }
 
 function keypressed(k) {
-    grid.visible = !grid.visible;
-    grid.fadeStart = time;
+    if(!grid.fading) {
+        grid.visible = !grid.visible;
+        grid.fadeStart = time;
+    }
 }
 
 function drawGrid() {
     ctx.fillStyle = "#000000";
+    grid.fading = false;
     for (i = 0; i < grid.gridHeight; i++) {
         for(j = 0; j < grid.gridWidth; j++) {
             //delay fade for cells further from the top left corner
@@ -143,6 +148,9 @@ function drawGrid() {
             var fade = (t - grid.fadeStart) / grid.fadeTime;
             fade = Math.max(0, fade);
             fade = Math.min(fade, 1);
+            if(fade > 0 && fade < 1) {
+                grid.fading = true;
+            }
             if(grid.visible) {
                 ctx.globalAlpha = fade;
             } else {
