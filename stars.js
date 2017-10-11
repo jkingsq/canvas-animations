@@ -16,8 +16,11 @@ function initAnimation() {
     bgFillColor = "#000000"
     //console.log(frameInfo.width);//makes sure dimensions are accessible
     setInterval(update, 17);
+    //1-pixel stars look great on my screen
+    star.size = Math.max(frameInfo.width * frameInfo.height / (1366*768), 1);
+    star.offset = star.size / 2;
     //roughly one star per second per 100x100 area of pixels
-    star.spawnRate = frameInfo.width * frameInfo.height / 10000;
+    star.spawnRate = frameInfo.width * frameInfo.height / (star.size * 10000);
 }
 
 window.onresize = function() {
@@ -117,7 +120,7 @@ star.draw = function(s) {
     //coordinates of the middle of the viewport
     var midX = frameInfo.width / 2;
     var midY = frameInfo.height / 2;
-    
+
     //on-screen coordinates of where the star will show up
     var screenX = midX + s.x / (s.z * distCoeffX) * midX;
     var screenY = midY - s.y / (s.z * distCoeffY) * midY;
@@ -135,7 +138,7 @@ star.draw = function(s) {
     ctx.fillStyle = rgbToHex(b, b, b);
 
     //draw the point on the screen
-    ctx.fillRect(screenX, screenY, 1, 1);
+    ctx.fillRect(screenX-star.offset, screenY-star.offset, star.size, star.size);
 }
 
 star.mainLoop = function(dt) {
