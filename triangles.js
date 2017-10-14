@@ -30,7 +30,7 @@ function drawAnimation() {
     ctx.fillStyle = bgFillColor;
     ctx.fillRect(0, 0, frameInfo.width, frameInfo.height);
 
-    var points = range(0, 1, 100);
+    var points = range(0, 1, triangleCount);
     //testAnimation(points, time);
     //slow?
     polychain(points, 2 * Math.PI, time);

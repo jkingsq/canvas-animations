@@ -2,7 +2,6 @@ var ctx;
 var frameInfo;
 var time;
 var bgFillColor;
-var triangleCount = 100;
 
 //perspective stuff
 var horizontalFOV = Math.PI / 4; //hardcoded 45 degree horizontal FOV
