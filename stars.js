@@ -80,7 +80,7 @@ function frameEdge(dist) {
 var star = {
     stars : [],
     newStar : function(x, y, z) {
-        return {x:x,y:y,z:z};
+        return {x:x,y:y,z:z,prevX:null,prevY:null};
     },
     maxViewDistance : 2000,
     fullBrightnessDistance : 1500,
@@ -134,10 +134,21 @@ star.draw = function(s) {
         (this.maxViewDistance - z)
             /(this.maxViewDistance - this.fullBrightnessDistance),
         1) * 255;
+    ctx.strokeStyle = rgbToHex(b, b, b);
     ctx.fillStyle = rgbToHex(b, b, b);
 
     //draw the point on the screen
+    if(s.prevX != null && s.prevY != null) {
+        ctx.lineWidth = star.size;
+        ctx.beginPath();
+        ctx.moveTo(s.prevX, s.prevY);
+        ctx.lineTo(screenX, screenY);
+        ctx.stroke();
+    }
     ctx.fillRect(screenX-star.offset, screenY-star.offset, star.size, star.size);
+
+    s.prevX = screenX;
+    s.prevY = screenY
 }
 
 star.mainLoop = function(dt) {
@@ -178,12 +189,14 @@ star.drawStars = function() {
 }
 
 star.collectStars = function() {
-    //stars are enqueued at the end of the array, so they are inherently sorted
-    //in ascending order of z coordinate.  This function drops stars from the
-    //beginning while z <= 0.
-    while(this.stars.length > 0 && this.stars[0].z <= 0){
-        this.stars.shift();
-    }
+    // remove stars that have passed depth = 0
+    // there was something in here about the "inherently sorted" order of the
+    // stars array that justified just dropping stars from the front of the
+    // beginning of the array, but that's no longer valid because of the random
+    // offsets added to a star's starting z coordinate
+    this.stars = this.stars.filter(function(s) {
+        return s.z > 0;
+    });
 }
 
 star.addStar = function() {
