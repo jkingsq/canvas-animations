@@ -100,8 +100,8 @@ function initGrid() {
     grid.boxHeight = 50;
 
     //negative space between boxes
-    grid.padX = 1;
-    grid.padY = 1;
+    grid.padX = 5;
+    grid.padY = 5;
 
     //pixel offset of the grid so that the screen's center aligns with that of
     //a cell
@@ -111,7 +111,7 @@ function initGrid() {
         (halfwayX - frameInfo.width/2) - Math.ceil(grid.boxWidth)/2;
     if(xOff < 0)
         xOff += grid.boxWidth;
-    grid.xOff = Math.ceil(xOff);
+    grid.xOff = Math.ceil(xOff) - Math.floor(grid.padX / 2);
 
     var halfwayY =
         Math.ceil((frameInfo.height/2)/grid.boxHeight)*grid.boxHeight;
@@ -119,7 +119,7 @@ function initGrid() {
         (halfwayY - frameInfo.height/2) - Math.ceil(grid.boxHeight)/2;
     if(yOff < 0)
         yOff += grid.boxHeight;
-    grid.yOff = Math.ceil(yOff);
+    grid.yOff = Math.ceil(yOff) - Math.floor(grid.padY / 2);
 
     //number of cells in the grid, horizontally and vertically
     grid.gridWidth =
@@ -162,8 +162,8 @@ function drawGrid() {
             var x = Math.floor(j * grid.boxWidth) - grid.xOff;
             var y = Math.floor(i * grid.boxHeight)- grid.yOff;
             ctx.fillRect(
-                Math.max(0, x + grid.padX),//x start
-                Math.max(0, y + grid.padY),//y start
+                Math.max(0, x),//x start
+                Math.max(0, y),//y start
                 grid.boxWidth - grid.padX + Math.min(x, 0),//width
                 grid.boxHeight- grid.padY + Math.min(y, 0) //height
             );
