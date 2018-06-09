@@ -7,10 +7,14 @@ function initAnimation() {
     sizeCanvas();
     //console.log(frameInfo.width);//makes sure dimensions are accessible
     setInterval(update, 1000/60);
+    initStar();
+    initGrid();
 }
 
 window.onresize = function() {
     sizeCanvas();
+    setStarDimensions();
+    setGridDimensions(grid.boxWidth, grid.boxHeight, grid.padX, grid.padY);
 }
 
 function sizeCanvas() {
@@ -26,8 +30,6 @@ function sizeCanvas() {
         Math.pow(frameInfo.width, 2) +
         Math.pow(frameInfo.height, 2)
     );
-    initStar();
-    initGrid();
 }
 
 function update() {
@@ -55,6 +57,10 @@ function initStar() {
     //rotations per second
     star.rps = 1/16;
 
+    setStarDimensions();
+}
+
+function setStarDimensions() {
     //represents the length of each line eminating from the center of the screen
     //diagonal screen size / 2
     star.rayLength = Math.sqrt(
@@ -90,18 +96,24 @@ grid = {}
 function initGrid() {
     grid.visible = false;
     //time in seconds it takes for a cell in the grid to fade in or out
-    grid.fadeTime = 500;
+    grid.fadeTime = 600;
+    grid.transitionTime = 2000;
     grid.fadeStart = 0;
     //used to check whether the fade animation is finished when a key is pressed
     grid.fading = false;
 
+    setGridDimensions(50, 50, 5, 5);
+}
+
+function setGridDimensions(boxW, boxH, padW, padH) {
+
     //size of each cell in the grid
-    grid.boxWidth = 50;
-    grid.boxHeight = 50;
+    grid.boxWidth = boxW;
+    grid.boxHeight = boxH;
 
     //negative space between boxes
-    grid.padX = 5;
-    grid.padY = 5;
+    grid.padX = padW;
+    grid.padY = padH;
 
     //pixel offset of the grid so that the screen's center aligns with that of
     //a cell
@@ -133,6 +145,7 @@ function keypressed(k) {
         grid.visible = !grid.visible;
         grid.fadeStart = time;
     }
+    console.log(k);
 }
 
 function drawGrid() {
@@ -141,13 +154,14 @@ function drawGrid() {
     for (i = 0; i < grid.gridHeight; i++) {
         for(j = 0; j < grid.gridWidth; j++) {
             //delay fade for cells further from the top left corner
-            var t = time - 1000*(i/grid.gridWidth + j/grid.gridHeight);
+            var t = time -
+                grid.transitionTime*(i+j)/(grid.gridWidth+grid.gridHeight);
 
             //completeness of the fade for this cell at this point in time
             //on [0,1]
             var fade = (t - grid.fadeStart) / grid.fadeTime;
             fade = Math.max(0, fade);
-            fade = Math.min(fade, 1);
+            fade = Math.min(fade, 0.5) * 2;
             if(fade > 0 && fade < 1) {
                 grid.fading = true;
             }
