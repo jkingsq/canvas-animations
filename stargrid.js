@@ -1,9 +1,11 @@
 var ctx;
 var frameInfo;
+var startTime;
 var time;
 
 function initAnimation() {
     time = new Date().getTime();
+    startTime = time;
     sizeCanvas();
     //console.log(frameInfo.width);//makes sure dimensions are accessible
     setInterval(update, 1000/60);
@@ -141,16 +143,25 @@ function setGridDimensions(boxW, boxH, padW, padH) {
 }
 
 function keypressed(k) {
+    toggleGrid();
+}
+
+function frameClicked() {
+    toggleGrid();
+}
+
+function toggleGrid() {
     if(!grid.fading) {
         grid.visible = !grid.visible;
         grid.fadeStart = time;
     }
-    console.log(k);
 }
 
 function drawGrid() {
     ctx.fillStyle = "#000000";
     grid.fading = false;
+    if(onSecondsElapsed(1.5) && !grid.visible)
+        toggleGrid();
     for (i = 0; i < grid.gridHeight; i++) {
         for(j = 0; j < grid.gridWidth; j++) {
             //delay fade for cells further from the top left corner
@@ -183,6 +194,12 @@ function drawGrid() {
             );
         }
     }
+}
+
+function onSecondsElapsed(s) {
+    var elapsed = time - startTime;
+    var t = s * 1000;
+    return elapsed > t && elapsed - dt < t;
 }
 
 var pressed={};
