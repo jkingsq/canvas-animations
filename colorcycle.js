@@ -20,7 +20,7 @@ function drawAnimation() {
     red = Math.floor(red);
     grn = Math.floor(grn);
     blu = Math.floor(blu);
-    
+
     ctx.fillStyle = rgbToHex(red, grn, blu);
     ctx.fillRect(0, 0, frameInfo.width, frameInfo.height);
 }

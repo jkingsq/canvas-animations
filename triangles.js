@@ -60,7 +60,7 @@ function colorWheel(theta, brightness) {
     red = Math.floor(red * brightness);
     grn = Math.floor(grn * brightness);
     blu = Math.floor(blu * brightness);
-    
+
     return rgbToHex(red, grn, blu);
 }
 
