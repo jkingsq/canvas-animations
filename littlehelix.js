@@ -2,7 +2,7 @@ var ctx;
 var frameInfo;
 var time;
 var bgFillColor;
-var triangleCount = 100;
+var triangleCount = 75;
 
 function initAnimation() {
     sizeCanvas();
@@ -31,9 +31,23 @@ function drawAnimation() {
     ctx.fillRect(0, 0, frameInfo.width, frameInfo.height);
 
     var points = range(0, 1, triangleCount);
-    //testAnimation(points, time);
-    //slow?
-    polychain(points, 2 * Math.PI, time);
+    helix(points, time);
+}
+
+function helix(points, time) {
+    var minX, maxX, minY, maxY, radius;
+    minX = frameInfo.width / 3;
+    maxX = frameInfo.width - minX;
+    minY = frameInfo.height / 3;
+    maxY = frameInfo.height - minY;
+    radius = Math.min(frameInfo.width, frameInfo.height) / 10;
+    points.map(function(i) {
+        var theta = i * 4 * Math.PI / 3 - 2 * Math.PI * time / 6;
+        var color = colorWheel(theta * 3, 1);
+        var x = i * (maxX - minX) + minX;
+        var y = maxY - i * (maxY - minY);
+        drawPolygon(ctx, "#000000", color, regularPolygon(x, y, radius, theta, 3));
+    });
 }
 
 function colorWheel(theta, brightness) {
@@ -101,28 +115,6 @@ function regularPolygon(centerX, centerY, radius, rotation, sides){
         result[i] = new Array(x, y);
     }
     return result;
-}
-
-function polychain(points, twist, time){
-    var width  = frameInfo.width;
-    var height = frameInfo.height;
-    points.map(function(i){
-        var x = (2/3) * i * width;
-        var y = height - (2/3) * height * i * i;
-        var radius = Math.max(width, height) / (i * 10);
-        var theta = i * twist * time / 2;
-        var outline = colorWheel(theta*3, 1);
-        var bg = 32;
-        var fill = rgbToHex((1-i)*bg,(1-i)*bg,(1-i)*bg);
-        //ugly IMO
-        //var fill = colorWheel(theta*3, (1 - i) / 2);
-        var fillBrightness = 48 - 48 * i;
-        var sides = 3;
-
-        var vertices = regularPolygon(x, y, radius, theta, sides);
-
-        drawPolygon(ctx, fill, outline, vertices);
-    });
 }
 
 function componentToHex(c) {
