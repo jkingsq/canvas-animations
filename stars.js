@@ -195,7 +195,7 @@ star.collectStars = function() {
     // beginning of the array, but that's no longer valid because of the random
     // offsets added to a star's starting z coordinate
     this.stars = this.stars.filter(function(s) {
-        return s.z > 0;
+        return s.prevZ > 0;
     });
 }
 
