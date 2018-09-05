@@ -42,7 +42,7 @@ function helix(points, time) {
     maxY = frameInfo.height - minY;
     radius = Math.min(frameInfo.width, frameInfo.height) / 10;
     points.map(function(i) {
-        var theta = i * 4 * Math.PI / 3 - 2 * Math.PI * time / 6;
+        var theta = i * 4 * Math.PI / 3 + 2 * Math.PI * time / 6;
         var color = colorWheel(theta * 3, 1);
         var x = i * (maxX - minX) + minX;
         var y = maxY - i * (maxY - minY);
