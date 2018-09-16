@@ -80,7 +80,7 @@ function frameEdge(dist) {
 var star = {
     stars : [],
     newStar : function(x, y, z) {
-        return {x:x,y:y,z:z,prevX:null,prevY:null};
+        return {x:x,y:y,z:z,prevX:null,prevY:null,prevZ:z};
     },
     maxViewDistance : 2000,
     fullBrightnessDistance : 1500,
@@ -102,6 +102,7 @@ star.getSpeed = function() {
 }
 
 star.update = function(s, dt) {
+    s.prevZ = s.z
     s.z = s.z - this.getSpeed() * dt / 1000;
     //TODO rotation
 }
@@ -194,9 +195,7 @@ star.collectStars = function() {
     // stars array that justified just dropping stars from the front of the
     // beginning of the array, but that's no longer valid because of the random
     // offsets added to a star's starting z coordinate
-    this.stars = this.stars.filter(function(s) {
-        return s.prevZ > 0;
-    });
+    this.stars = this.stars.filter(s => s.z > 0);
 }
 
 star.addStar = function() {
